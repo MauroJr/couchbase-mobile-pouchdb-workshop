@@ -24,18 +24,63 @@ The `images` directory contains screenshots of various steps used in this `READM
 
 There are a few requirements necessary before being able complete this workshop:
 
-1. The Android SDK, Xcode, or both must be installed
-2. Node.js 5 must be installed
+1. The [Android SDK](http://developer.android.com/sdk/index.html), Xcode, or both must be installed
+2. [Node.js](https://nodejs.org) 5 must be installed
+3. [Couchbase Sync Gateway](http://www.couchbase.com/nosql-databases/downloads)
 
 Although not required, the Android third party simulator, [Genymotion](https://www.genymotion.com), would be useful.
 
 ## Agenda
+
+1. Getting Started
+    1. Restoring Platforms and Plugins
+    2. Running Sync Gateway
+    3. Running the Finished Project
+2. STEP 1: Creating a New PouchDB Local Database
+3. STEP 2: Creating a Function for Saving Documents to the Database
+4. STEP 3: Listening for Changes in the PouchDB Service
+5. STEP 4: Retrieving a Particular Document in the PouchDB Service
+6. STEP 5: Syncing with Couchbase Sync Gateway via the PouchDB Service
+7. STEP 6: Listening for Broadcasts in the AngularJS Controller
+8. STEP 7: Including Couchbase Sync Gateway
+9. STEP 8: Allowing CORS in Sync Gateway
 
 ## Getting Started
 
 In the getting started, you will get the project set up locally, verify it by running the `finished` project, then switch to the `initial` project to follow the steps which will have you learn the Ionic Framework and PouchDB basics.
 
 We are starting with the `finished` project because the `initial` project has holes in it that will prevent it from running before completing the workshop.  By running `finished` we can prove that our environment is correct and ready to use.
+
+![Final Result](images/final.png)
+
+### Restoring Platforms and Plugins
+
+Both the `initial` and `finished` projects have dependencies that were not pushed to GitHub.  After downloading or cloning either of the projects, navigate into them via a Command Prompt or Terminal and execute the following:
+
+```
+ionic state restore
+```
+
+This will re-install the platforms and all plugins required by Ionic Framework to run.
+
+### Running Sync Gateway
+
+With Couchbase Sync Gateway downloaded and extracted.  Execute the following:
+
+```
+/path/to/sync/gateway/bin/sync-gateway /path/to/finished/sync-gateway-config.json
+```
+
+### Running the Finished Project
+
+To run the `finished` project, execute the following from the Command Prompt or Terminal:
+
+```
+ionic run android
+ionic run ios
+```
+
+If you're using a Windows or Linux computer, you cannot build for iOS.  It is a luxury of Mac only.
 
 ## STEP 1: Creating a New PouchDB Local Database
 
@@ -141,3 +186,50 @@ $rootScope.$on("broadcast_name_here", function(event, data) {
 ```
 
 The `items` scope is an object so it would be a good idea to add changed objects to it through a document id map rather than pushing like you would an array.  By mapping based on an id, changes to the object are overwritten.
+
+## STEP 7: Including Couchbase Sync Gateway
+
+The Ionic Framework PouchDB project can communicate with the Couchbase Sync Gateway.  In fact, PouchDB allows for this with or without a mobile aspect of our project.
+
+A Sync Gateway configuration file, in its simplest form, will look something like this:
+
+```json
+{
+    "log":["CRUD+", "REST+", "Changes+", "Attach+"],
+    "databases": {
+        "test-database": {
+            "server":"walrus:",
+            "sync":`
+                function (doc) {
+                    channel (doc.channels);
+                }
+            `,
+            "users": {
+                "GUEST": {
+                    "disabled": false,
+                    "admin_channels": ["*"]
+                }
+            }
+        }
+    }
+}
+```
+
+Here we're saying that the remote database will be called `test-database` and all documents should be saved and accessible by guest users.  Guest users are those who have not authenticated through Facebook or similar.
+
+By using `walrus:` all data will be saved in-memory, rather than Couchbase Server.  If it were a host instead, it would use Couchbase Server.
+
+## STEP 8: Allowing CORS in Sync Gateway
+
+Since PouchDB can work in a web browser as well, it might be a good idea to allow communication from a certain domain and port.  The following can be added to the Sync Gateway configuration file:
+
+```json
+"CORS": {
+    "Origin": ["http://localhost:8100"],
+    "LoginOrigin": ["http://localhost:8100"],
+    "Headers": ["Content-Type"],
+    "MaxAge": 17280000
+}
+```
+
+This means that localhost on port 8100 can synchronize with Couchbase Sync Gateway.
