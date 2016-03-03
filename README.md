@@ -30,6 +30,7 @@ There are a few requirements necessary before being able complete this workshop:
 4. [Couchbase Sync Gateway](http://www.couchbase.com/nosql-databases/downloads)
 
 Although not required, the Android third party simulator, [Genymotion](https://www.genymotion.com), would be useful.
+*Note: For Android, you should mount and run the IntelHAXM_1.1.4.dmg file located in {SDK_FOLDER}\extras\intel\Hardware_Accelerated_Execution_Manager
 
 ## Agenda
 
