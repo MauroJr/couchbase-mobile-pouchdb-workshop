@@ -85,7 +85,7 @@ If you're using a Windows or Linux computer, you cannot build for iOS.  It is a 
 
 ## STEP 1: Creating a New PouchDB Local Database
 
-Inside the **www/js/app.js** file there is a blue-print to an AngularJS service called `$pouchDB`.  In it we'll be creating many functions all with the purpose of interfacing with the PouchDB JavaScript library.  Because PouchDB is vanilla JavaScript and Ionic Framework uses AngularJS, we need to wrap the PouchDB functions in this service to make it more AngularJS friendly.
+From within the `initial/` folder and inside the **www/js/app.js** file there is a blue-print to an AngularJS service called `$pouchDB`.  In it we'll be creating many functions all with the purpose of interfacing with the PouchDB JavaScript library.  Because PouchDB is vanilla JavaScript and Ionic Framework uses AngularJS, we need to wrap the PouchDB functions in this service to make it more AngularJS friendly.
 
 Per the PouchDB documentation, a local database can be created by calling the following:
 
