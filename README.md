@@ -26,7 +26,8 @@ There are a few requirements necessary before being able complete this workshop:
 
 1. The [Android SDK](http://developer.android.com/sdk/index.html), Xcode, or both must be installed
 2. [Node.js](https://nodejs.org) 5 must be installed
-3. [Couchbase Sync Gateway](http://www.couchbase.com/nosql-databases/downloads)
+3. [Ionic](http://ionicframework.com/getting-started/) Install require frameworks
+4. [Couchbase Sync Gateway](http://www.couchbase.com/nosql-databases/downloads)
 
 Although not required, the Android third party simulator, [Genymotion](https://www.genymotion.com), would be useful.
 
